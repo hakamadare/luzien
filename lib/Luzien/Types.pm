@@ -1,3 +1,4 @@
+# ABSTRACT: Custom types for Luzien
 use Modern::Perl qw( 2014 );
 package Luzien::Types;
 use Moose;
@@ -17,16 +18,20 @@ class_type Point, { class => 'Luzien::Point' };
 
 coerce Point,
   from HashRef,
-  via {
-    try {
-      Luzien::Point->new( %{$_} )
-    } catch {
-      Luzien::Exception->new->throw;
-    }
-  };
+  via { Luzien::Point->new( %{$_} ) },
+  from ArrayRef,
+  via { Luzien::Point->new( datetime => $_->[0], value => $_->[1], ) };
 
 subtype PointArrayRef,
   as ArrayRef[ Point ];
+
+coerce PointArrayRef,
+  from ArrayRef,
+  via {
+    my $pointref = $_;
+    my( @points ) = map { Luzien::Point->new( datetime => $_->[0], value => $_->[1], ) } @{$pointref};
+    return \@points;
+  };
 
 subtype PositiveInt,
   as Int,

@@ -1,7 +1,8 @@
+# ABSTRACT: A data point from a Nap
 use Modern::Perl qw( 2014 );
 package Luzien::Point;
 use Moose;
-use MooseX::Types::DateTime qw( DateTime );
+use MooseX::Types::DateTimeX qw( DateTime );
 use namespace::autoclean;
 
 use Luzien::Types qw( PositiveInt );

@@ -1,3 +1,4 @@
+# ABSTRACT: Exception base class
 use Modern::Perl qw( 2014 );
 package Luzien::Exception;
 use Moose;

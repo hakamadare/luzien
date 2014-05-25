@@ -5,36 +5,24 @@ use Luzien::Point;
 
 my $point;
 
-my $good_datetimehash = {
-  year       => 2014,
-  month      => 5,
-  day        => 24,
-  hour       => 7,
-  minute     => 15,
-  second     => 47,
-  nanosecond => 500000000,
-  time_zone  => 'America/New_York',
-};
+my $good_datetimestr = '20:44';
 my $good_pointval = '1561';
 
 my $good_point = {
-  datetime => $good_datetimehash,
+  datetime => $good_datetimestr,
   value => $good_pointval,
 };
 
-my $bad_datetimehash = {
-  bla  => 'de',
-  bloo => 'bla',
-};
+my $bad_datetimestr = 'i am not a parseable time';
 my $bad_pointval = '-1';
 
 my $bad_datetime_point = {
-  datetime => $bad_datetimehash,
+  datetime => $bad_datetimestr,
   value => $good_pointval,
 };
 
 my $bad_value_point = {
-  datetime => $good_datetimehash,
+  datetime => $good_datetimestr,
   value => $bad_pointval,
 };
 
@@ -48,16 +36,16 @@ can_ok( $point, 'value' );
 isa_ok( $point->datetime, 'DateTime' );
 is( $point->value, '1561' );
 
-# isa_ok(
-#   exception { Luzien::Point->new( $bad_datetime_point ) },
-#   'Luzien::Exception::InvalidPoint',
-#   'throws exception on invalid datetime',
-# );
-#
-# isa_ok(
-#   exception { Luzien::Point->new( $bad_value_point ) },
-#   'Luzien::Exception::InvalidPoint',
-#   'throws exception on invalid value',
-# );
+isa_ok(
+  exception { Luzien::Point->new( $bad_datetime_point ) },
+  'Moose::Exception::ValidationFailedForInlineTypeConstraint',
+  'throws exception on invalid datetime',
+);
+
+isa_ok(
+  exception { Luzien::Point->new( $bad_value_point ) },
+  'Moose::Exception::ValidationFailedForInlineTypeConstraint',
+  'throws exception on invalid datetime',
+);
 
 done_testing();

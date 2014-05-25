@@ -1,3 +1,4 @@
+# ABSTRACT: Invalid Point Exception
 use Modern::Perl qw( 2014 );
 package Luzien::Exception::InvalidPoint;
 use Moose;

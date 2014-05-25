@@ -1,3 +1,4 @@
+# ABSTRACT: Base class for other Luzien data classes
 use Modern::Perl qw( 2014 );
 package Luzien::Base;
 use Moose;
