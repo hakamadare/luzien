@@ -1,7 +1,7 @@
 use Test::More;
 use Test::Fatal;
 
-use Luzien::Nap;
+use Luzien::Schema::Nap;
 
 my $nap;
 
@@ -32,9 +32,9 @@ my $bad_points = {
   ],
 };
 
-$nap = Luzien::Nap->new( $good_points );
+$nap = Luzien::Schema::Nap->new( $good_points );
 
-isa_ok( $nap, 'Luzien::Nap' );
+isa_ok( $nap, 'Luzien::Schema::Nap' );
 
 can_ok( $nap, 'points' );
 can_ok( $nap, 'timezone' );
@@ -43,8 +43,16 @@ can_ok( $nap, 'nap_end' );
 can_ok( $nap, 'alarm_start' );
 can_ok( $nap, 'alarm_end' );
 
+is( $nap->size, scalar( @{$good_points->{'points'}} ) );
+
+my $point = $nap->next_point;
+
+isa_ok( $point, 'Luzien::Schema::Point' );
+
+is( $nap->size, scalar( @{$good_points->{'points'}} ) - 1 );
+
 isa_ok(
-  exception { Luzien::Nap->new( $bad_points ) },
+  exception { Luzien::Schema::Nap->new( $bad_points ) },
   'Moose::Exception::ValidationFailedForInlineTypeConstraint',
   'throws exception on invalid points',
 );

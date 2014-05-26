@@ -1,13 +1,15 @@
 # ABSTRACT: A data point from a Nap
 use Modern::Perl qw( 2014 );
-package Luzien::Point;
+package Luzien::Schema::Point;
 use Moose;
 use MooseX::Types::DateTimeX qw( DateTime );
 use namespace::autoclean;
 
 use Luzien::Types qw( PositiveInt );
 
-extends 'Luzien::Base';
+extends 'Luzien::Schema';
+
+with 'Luzien::Role::Storable';
 
 has 'datetime' => (
   is  => 'ro',

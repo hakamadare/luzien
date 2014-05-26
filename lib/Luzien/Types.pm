@@ -14,13 +14,13 @@ use namespace::autoclean;
 
 use Luzien::Exception::InvalidPoint;
 
-class_type Point, { class => 'Luzien::Point' };
+class_type Point, { class => 'Luzien::Schema::Point' };
 
 coerce Point,
   from HashRef,
-  via { Luzien::Point->new( %{$_} ) },
+  via { Luzien::Schema::Point->new( %{$_} ) },
   from ArrayRef,
-  via { Luzien::Point->new( datetime => $_->[0], value => $_->[1], ) };
+  via { Luzien::Schema::Point->new( datetime => $_->[0], value => $_->[1], ) };
 
 subtype PointArrayRef,
   as ArrayRef[ Point ];
@@ -29,7 +29,7 @@ coerce PointArrayRef,
   from ArrayRef,
   via {
     my $pointref = $_;
-    my( @points ) = map { Luzien::Point->new( datetime => $_->[0], value => $_->[1], ) } @{$pointref};
+    my( @points ) = map { Luzien::Schema::Point->new( datetime => $_->[0], value => $_->[1], ) } @{$pointref};
     return \@points;
   };
 

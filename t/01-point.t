@@ -1,7 +1,7 @@
 use Test::More;
 use Test::Fatal;
 
-use Luzien::Point;
+use Luzien::Schema::Point;
 
 my $point;
 
@@ -26,9 +26,9 @@ my $bad_value_point = {
   value => $bad_pointval,
 };
 
-$point = Luzien::Point->new( $good_point );
+$point = Luzien::Schema::Point->new( $good_point );
 
-isa_ok( $point, 'Luzien::Point' );
+isa_ok( $point, 'Luzien::Schema::Point' );
 
 can_ok( $point, 'datetime' );
 can_ok( $point, 'value' );
@@ -37,13 +37,13 @@ isa_ok( $point->datetime, 'DateTime' );
 is( $point->value, '1561' );
 
 isa_ok(
-  exception { Luzien::Point->new( $bad_datetime_point ) },
+  exception { Luzien::Schema::Point->new( $bad_datetime_point ) },
   'Moose::Exception::ValidationFailedForInlineTypeConstraint',
   'throws exception on invalid datetime',
 );
 
 isa_ok(
-  exception { Luzien::Point->new( $bad_value_point ) },
+  exception { Luzien::Schema::Point->new( $bad_value_point ) },
   'Moose::Exception::ValidationFailedForInlineTypeConstraint',
   'throws exception on invalid datetime',
 );

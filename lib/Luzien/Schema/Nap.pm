@@ -1,26 +1,34 @@
 # ABSTRACT: An array of Points with metadata
 use Modern::Perl qw( 2014 );
-package Luzien::Nap;
+package Luzien::Schema::Nap;
 use Moose;
 use MooseX::Types::DateTime::ButMaintained qw( TimeZone );
 use MooseX::Types::DateTimeX qw( DateTime );
 use namespace::autoclean;
 
 use Luzien::Types qw( PointArrayRef );
-use Luzien::Point;
+use Luzien::Schema::Point;
 
-extends 'Luzien::Base';
+extends 'Luzien::Schema';
 
 has 'points' => (
-  is  => 'rw',
+  traits => ['Array'],
+  is  => 'ro',
   isa => PointArrayRef,
   coerce => 1,
   lazy => 1,
   default => sub { [] },
+  handles => {
+    add_point => 'push',
+    each => 'elements',
+    empty => 'is_empty',
+    next_point => 'shift',
+    size => 'count',
+  },
 );
 
 has 'timezone' => (
-  is  => 'rw',
+  is  => 'ro',
   isa => TimeZone,
   coerce => 1,
   lazy => 1,
@@ -28,7 +36,7 @@ has 'timezone' => (
 );
 
 has 'nap_start' => (
-  is  => 'rw',
+  is  => 'ro',
   isa => DateTime,
   coerce => 1,
   lazy => 1,
@@ -36,7 +44,7 @@ has 'nap_start' => (
 );
 
 has 'nap_end' => (
-  is  => 'rw',
+  is  => 'ro',
   isa => DateTime,
   coerce => 1,
   lazy => 1,
@@ -44,7 +52,7 @@ has 'nap_end' => (
 );
 
 has 'alarm_start' => (
-  is  => 'rw',
+  is  => 'ro',
   isa => DateTime,
   coerce => 1,
   lazy => 1,
@@ -52,7 +60,7 @@ has 'alarm_start' => (
 );
 
 has 'alarm_end' => (
-  is  => 'rw',
+  is  => 'ro',
   isa => DateTime,
   coerce => 1,
   lazy => 1,
