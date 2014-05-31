@@ -23,6 +23,10 @@ my $good_points = {
     [ '03:05', '50', ],
     [ '03:15', '153', ],
   ],
+  user => {
+    username => 'foo',
+    password => 'bar',
+  },
 };
 
 my $bad_points = {

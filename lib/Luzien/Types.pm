@@ -7,12 +7,13 @@ use MooseX::Types -declare => [
   Point
   PointArrayRef
   PositiveInt
+  User
+  DB
   )
 ];
-use MooseX::Types::Moose qw( Int ArrayRef HashRef );
+use MooseX::Types::Moose qw( Undef Str Int ArrayRef HashRef );
+use KiokuX::User::Util qw( crypt_password );
 use namespace::autoclean;
-
-use Luzien::Exception::InvalidPoint;
 
 class_type Point, { class => 'Luzien::Schema::Point' };
 
@@ -37,5 +38,29 @@ subtype PositiveInt,
   as Int,
   where { $_ > 0 },
   message { "Value must be greater than 0" };
+
+class_type User, { class => 'Luzien::Schema::User' };
+
+coerce User,
+  from HashRef,
+  via { Luzien::Schema::User->new(
+      id       => $_->{'username'},
+      password => crypt_password( $_->{'password'} ),
+  ) },
+  from ArrayRef,
+  via { Luzien::Schema::User->new(
+      id       => $_->[0],
+      password => crypt_password( $_->[1] ),
+  ) };
+
+class_type DB, { class => 'Luzien::DB' };
+
+coerce DB,
+  from Undef,
+  via { Luzien::DB->new( dsn => 'hash' ) },
+  from Str,
+  via { Luzien::DB->new( dsn => $_ ) },
+  from HashRef,
+  via { Luzien::DB->new( %{$_} ) };
 
 __PACKAGE__->meta->make_immutable;

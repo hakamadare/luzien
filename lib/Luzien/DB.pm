@@ -8,24 +8,16 @@ use namespace::autoclean;
 
 extends 'KiokuX::Model';
 
-sub store_nap {
-  my( $self, $nap ) = @_;
+sub add_nap {
+  my( $self, @args ) = @_;
 
-  my $uuid = $self->txn_do(
-    sub { $self->store( $nap ) }
-  );
+  my $nap = Luzien::Schema::Nap->new( @args );
 
-  return $uuid;
-}
+  $self->txn_do( sub {
+      $self->insert( $nap );
+    } );
 
-sub store_point {
-  my( $self, $point ) = @_;
-
-  my $uuid = $self->txn_do(
-    sub { $self->store( $point ) }
-  );
-
-  return $uuid;
-}
+  return $nap;
+};
 
 __PACKAGE__->meta->make_immutable;

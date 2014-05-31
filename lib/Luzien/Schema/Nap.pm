@@ -6,10 +6,19 @@ use MooseX::Types::DateTime::ButMaintained qw( TimeZone );
 use MooseX::Types::DateTimeX qw( DateTime );
 use namespace::autoclean;
 
-use Luzien::Types qw( PointArrayRef );
+use Luzien::Types qw( PointArrayRef User );
 use Luzien::Schema::Point;
+use Luzien::Schema::User;
 
 extends 'Luzien::Schema';
+
+with qw( Luzien::Role::Storable );
+
+has 'user' => (
+  is => 'ro',
+  isa => User,
+  coerce => 1,
+);
 
 has 'points' => (
   traits => ['Array'],

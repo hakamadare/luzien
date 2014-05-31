@@ -3,6 +3,7 @@ use Test::Fatal;
 
 use Luzien::DB;
 use Luzien::Schema::Nap;
+use Luzien::Schema::Point;
 
 my $db = Luzien::DB->new( dsn => 'hash' );
 
@@ -29,23 +30,22 @@ my $good_points = {
   ],
 };
 
-my $old_nap = Luzien::Schema::Nap->new( $good_points );
-
-my $old_point = $old_nap->next_point;
-
-isa_ok( $old_point, 'Luzien::Schema::Point' );
-
 my $scope = $db->new_scope;
 
-# my $uuid = $db->store( $nap );
-my $uuid = $db->store( $point );
+my $old_nap = $db->add_nap( $good_points );
 
-ok( $uuid, 'got a UUID' );
+isa_ok( $old_nap, 'Luzien::Schema::Nap' );
 
-# my $new_nap = $db->lookup( $uuid );
-my $new_point = $db->lookup( $uuid );
+my $id = $old_nap->id;
 
-# isa_ok( $new_nap, 'Luzien::Schema::Nap' );
-isa_ok( $new_point, 'Luzien::Schema::Point' );
+undef $scope;
+
+$scope = $db->new_scope;
+
+my $new_nap = $db->lookup( $id );
+
+isa_ok( $new_nap, 'Luzien::Schema::Nap' );
+
+is_deeply( $new_nap, $old_nap );
 
 done_testing();
